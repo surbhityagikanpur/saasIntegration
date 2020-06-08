@@ -1,0 +1,85 @@
+<html>
+
+<head>
+    <title>Home Page</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    </nav>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-sm-12">
+
+                <div class="row">
+                    <div class="col-sm-8 text-center">
+                        <h1>Add User</h1>
+                        <img src="/images/logo.png" alt="">
+                    </div>
+                    <div class="col-sm-4 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Add User</h5>
+                                <form name="addForm" enctype="application/x-www-form-urlencoded">
+                                    <div class="form-group">
+                                        <label for="username">Phone No.</label>
+                                        <input type="number" class="form-control" id="phoneNo" name="phoneNo"
+                                            aria-describedby="emailHelp" placeholder="Enter Phone Number" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" required
+                                            aria-describedby="emailHelp" placeholder="Enter email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">password</label>
+                                        <input type="text" class="form-control" id="password" name="password"
+                                            placeholder="Enter Address">
+                                    </div>
+                                    <!-- <a href="./forgot-password">Forgot Password?</a><br><br> -->
+                                    <button type="button" onclick="registerUser()" class="btn btn-primary btn-block">Submit</button>
+                                    <!-- <a href="./register">New User?</a> -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function registerUser() {    
+            let data = {
+                phoneNo: addForm.phoneNo.value,
+                email : addForm.email.value,
+                password : addForm.password.value
+            }
+            let response = fetch('/register/token', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                    },
+                body: JSON.stringify(data) 
+            }).then(response => response.json())
+                .then(result =>  {
+                    if(result.success){
+                        
+                    }
+            });
+        }
+    </script>
+
+   
+</body>
+
+</html>

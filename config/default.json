@@ -1,0 +1,7 @@
+{
+    "dbURL": "mongodb+srv://root:root@cluster0-d1ck3.mongodb.net/test?retryWrites=true&w=majority",
+    "port": 3000,
+    "secret": "this_is_the_secret_key",
+    "host": "localhost:3000"
+}  
+
