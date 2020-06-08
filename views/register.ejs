@@ -64,7 +64,7 @@
                 email : addForm.email.value,
                 password : addForm.password.value
             }
-            let response = fetch('/register/token', {
+            let response = fetch('/register', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'

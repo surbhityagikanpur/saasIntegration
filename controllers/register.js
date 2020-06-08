@@ -3,10 +3,11 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const AWS = require('aws-sdk');
-const customerID;
+let customerID;
 
 exports.subToken = async (req, res, next) => {
   customerID = "data.CustomerIdentifier";
+  
   return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
 
   // const marketplacemetering = new AWS.MarketplaceMetering({
