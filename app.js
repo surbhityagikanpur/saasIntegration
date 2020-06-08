@@ -42,6 +42,6 @@ app.use(register);
 // =======================
 // start the server ======
 // =======================
-app.listen(3000, '0.0.0.0');
-console.log('Magic happens at http://localhost:' + 3000);
+app.listen(port);
+console.log('Magic happens at http://localhost:' + port);
 module.exports = app;
