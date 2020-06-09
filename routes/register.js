@@ -7,7 +7,7 @@ const isAuth = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/subToken', registerController.subToken);
+router.post('/', registerController.subToken);
 
 router.get('/register', registerController.registerView)
 

@@ -7,7 +7,7 @@ let customerID;
 
 exports.subToken = async (req, res, next) => {
   customerID = "data.CustomerIdentifier";
-  
+  console.log("testing token", req.body);
   return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
 
   // const marketplacemetering = new AWS.MarketplaceMetering({
