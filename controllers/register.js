@@ -6,36 +6,38 @@ const AWS = require('aws-sdk');
 let customerID;
 
 exports.subToken = async (req, res, next) => {
-  customerID = "data.CustomerIdentifier";
-  console.log("testing token", req.body);
-  return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
+  //customerID = "data.CustomerIdentifier";
+  console.log("testing token", req.body.x-amzn-marketplace-token);
+  console.log("headers", req.headers);
+  //return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
 
-  // const marketplacemetering = new AWS.MarketplaceMetering({
-  //   apiVersion: '2016-01-14',
-  //   region: 'us-east-1',
-  //   credentials: new AWS.TemporaryCredentials({
-  //     RoleArn: 'REPLACE_ME' // TODO replace with RoleArn output from CloudFormation stack
-  //   })
-  // });
+  const marketplacemetering = new AWS.MarketplaceMetering({
+    apiVersion: '2016-01-14',
+    region: 'us-east-1',
+    credentials: new AWS.TemporaryCredentials({
+      RoleArn: 'arn:aws:sns:us-east-1:287250355862:aws-mp-subscription-notification-2gkn78ogqedf5jdleyszhuw9d' // TODO replace with RoleArn output from CloudFormation stack
+    })
+  });
   
-  // marketplacemetering.resolveCustomer({
-  //   RegistrationToken: req.body.token // TODO replace with token from POST request
-  // }, (err, data) => {
-  //   if (err) {
-  //     if (err.code === 'InvalidTokenException') {
-  //       return res.status(422).json({ success: false, error: err, message: 'Invalid token' });
-  //     } else {
-  //      throw err;
-  //     }
-  //   } else {
-  //     if (data.ProductCode === 'REPLACE_ME') { // TODO replace with your product code from AWS Marketplace
-  //       req.customerId = data.CustomerIdentifier
-  //       return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
-  //     } else {
-  //       return res.status(422).json({ success: false, error: err, message: 'Invalid product code' });
-  //     }
-  //   }
-  // });
+  marketplacemetering.resolveCustomer({
+    RegistrationToken: req.body.x-amzn-marketplace-token // TODO replace with token from POST request
+  }, (err, data) => {
+    if (err) {
+      if (err.code === 'InvalidTokenException') {
+        return res.status(422).json({ success: false, error: err, message: 'Invalid token' });
+      } else {
+       throw err;
+      }
+    } else {
+      if (data.ProductCode === '2gkn78ogqedf5jdleyszhuw9d') { // TODO replace with your product code from AWS Marketplace
+        console.log("CustomerIdentifier", data.CustomerIdentifier)
+        customerID = data.CustomerIdentifier
+        return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
+      } else {
+        return res.status(422).json({ success: false, error: err, message: 'Invalid product code' });
+      }
+    }
+  });
 }
 
 exports.registerCustomer = async (req, res, next) => {
