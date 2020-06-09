@@ -6,21 +6,31 @@ const AWS = require('aws-sdk');
 let customerID;
 
 exports.subToken = async (req, res, next) => {
-  //customerID = "data.CustomerIdentifier";
-  console.log("testing token", req.body.x-amzn-marketplace-token);
-  console.log("headers", req.headers);
+  customerID = "data.CustomerIdentifier";
+   console.log("headers", req.headers);
+  console.log("testing token", req.body["x-amzn-marketplace-token"]);
+ 
   //return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
 
-  const marketplacemetering = new AWS.MarketplaceMetering({
-    apiVersion: '2016-01-14',
+  // AWS.config.apiVersions = {
+  //   apiVersion: '2016-01-14',
+  //   region: 'us-east-1',
+  //   credentials: new AWS.TemporaryCredentials({
+  //     RoleArn: 'arn:aws:sns:us-east-1:287250355862:aws-mp-subscription-notification-2gkn78ogqedf5jdleyszhuw9d' // TODO replace with RoleArn output from CloudFormation stack
+  //   })
+  // };
+  // AWS.config.update({region:'us-east-1'});
+  AWS.config.update({
     region: 'us-east-1',
-    credentials: new AWS.TemporaryCredentials({
-      RoleArn: 'arn:aws:sns:us-east-1:287250355862:aws-mp-subscription-notification-2gkn78ogqedf5jdleyszhuw9d' // TODO replace with RoleArn output from CloudFormation stack
-    })
+    accessKeyId: 'AKIA4MPQDEZ4E7PMNZJ2',
+    secretAccessKey: 'kGuvPUQIpytjavAsLIaPbv4EEf6ON/BQvwfmTzo8',
   });
   
+  var marketplacemetering = new AWS.MarketplaceMetering();
+  //var marketplacemetering = new AWS.MarketplaceMetering({apiVersion: '2016-01-14', region: 'us-east-1'});
+  
   marketplacemetering.resolveCustomer({
-    RegistrationToken: req.body.x-amzn-marketplace-token // TODO replace with token from POST request
+    RegistrationToken:  req.body["x-amzn-marketplace-token"] // TODO replace with token from POST request
   }, (err, data) => {
     if (err) {
       if (err.code === 'InvalidTokenException') {
@@ -29,13 +39,10 @@ exports.subToken = async (req, res, next) => {
        throw err;
       }
     } else {
-      if (data.ProductCode === '2gkn78ogqedf5jdleyszhuw9d') { // TODO replace with your product code from AWS Marketplace
         console.log("CustomerIdentifier", data.CustomerIdentifier)
         customerID = data.CustomerIdentifier
-        return res.status(200).json({ success: true, CustomerIdentifier: "data.CustomerIdentifier", message: 'working' });
-      } else {
-        return res.status(422).json({ success: false, error: err, message: 'Invalid product code' });
-      }
+        return res.status(200).json({ success: true, ProductCode: data.ProductCode, CustomerIdentifier: data.CustomerIdentifier, message: 'working' });
+     
     }
   });
 }
